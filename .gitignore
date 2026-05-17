@@ -1,3 +1,9 @@
 data/
 data_text/
-
+thoughts.txt
+code/__pycache__/
+blagh.py
+main.sh
+test.sh
+code/sensitive.py
+outdated_code/
