@@ -5,14 +5,18 @@ import sys
 import pathlib
 import sensitive
 from organize import establish_lines, keep_only_entries_with_transaction, create_list_of_transactions, initialize_dictionary
+# TODO: make a sensitive.py checker, make file if not found, ask in the GUI whether you want to define bank or town
+# to reduce sensitive info
+
 def generate_data_text():
     
     dir = pathlib.Path("data/")
-    # possibly a security issue, but not likely, this is a renamed file, and the gitignore explicitly
-    # avoids commiting this data, and data_text data
+    os.makedirs(dir, exist_ok=True)
+        
     # will need to change this and establish dummy data to demonstrate functionality
     # blegh, lotta work
     dst = pathlib.Path("data_text/")
+    os.makedirs(dst, exist_ok=True)
     docs = []
     for file in dir.iterdir():
         
@@ -60,7 +64,7 @@ def main():
     chunks = []
     for dat in data:
 
-        blocks = create_list_of_transactions(chequeing)
+        blocks = create_list_of_transactions(dat)
         chunks.extend(blocks)
     initialize_dictionary(chunks)
     # woo! got both deposits and withdrawals working, reworked the framework I was using to sort them

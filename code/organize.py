@@ -1,6 +1,7 @@
 import os
 import re
 from enum import Enum
+import sensitive
 # important split keywords
 # OWNER, SPLITS into blocks seperated by account type
 # UNLIMITED checks that the transaction block following is chequeing
@@ -10,14 +11,16 @@ from enum import Enum
 
 
 def establish_lines(path):
-    dir = "data_text/"
+    
     clean = []
     with open(path) as f:
         lines = f.readlines()
     for line in lines:
         shrunk_lines = line.replace(" ", "")
         stripped_lines = shrunk_lines.strip()
+        
         if stripped_lines.lower():
+            
             clean.append(stripped_lines.lower())
     rejoined = "\n".join(clean)
     return rejoined
@@ -221,19 +224,33 @@ def initialize_dictionary(blocks: list[str]) -> dict[str, int]:
             raise Exception("Nothing should be here, if there is, need to implement a new condition")
             
             
-                
-        
-        
-        
-        
+    def sanitize(data):
+        for dat in data:
+            if isinstance(data[dat], dict):
+                for spot in data[dat]:
+                    if sensitive.TOWN in spot:
+                        new = spot.replace(sensitive.TOWN, "")
+                        data[dat][new] = data[dat][spot]
+                        del data[dat][spot]
+                        sanitize(data)
+                        return data
+                    if "store" in spot:
+                        new = spot.replace("store", "")
+                        data[dat][new] = data[dat][spot]
+                        del data[dat][spot]
+                        sanitize(data)
+                        return data
+        return data
+    data = sanitize(data)                  
+            
     print(data)
     
     
     pass
 
 def clean_num(string: str) -> int:
-    if "bcca" in string:
-        a = string.split("bcca")[1].split("\xa0")[0]
+    if sensitive.AREA in string:
+        a = string.split(sensitive.AREA)[1].split("\xa0")[0]
     else:
         a = string.split("\xa0")[0]
     b = a.strip().replace(",", "").replace(".", "")
