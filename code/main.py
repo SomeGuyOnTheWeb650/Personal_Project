@@ -44,7 +44,7 @@ def generate_data_text():
                     new = dst / f
                         
                 with pathlib.Path.open(new, "w") as f:
-                    f.write(text)
+                    f.write(text.lower())
                     #Path.open() needs the "w" to change mode to write mode, allows for the creation
                     #of files instead of just the reference of existing ones
                 doc = establish_lines(new)
@@ -75,4 +75,3 @@ def main():
 
 
 
-main()

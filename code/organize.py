@@ -40,14 +40,20 @@ def keep_only_entries_with_transaction(rejoined):
 
 def create_list_of_transactions(chequeing: str):
     lines = chequeing.split("\n")
+    
     blocks = []
     block = []
     # block is going to be a string seperated by newlines
     # that contains ALL of a SINGLE transactions data
+    i = 0
     for line in lines:
+        #print(f"{i}: {repr(line)}")
+        i += 1
+           
         spot = line + "\n"
         # spot is shorthand for each line with a newline added, for ease of typing
         if re.match(r"[0-9]{2}[a-z]{3,5}[0-9]{2}", line):
+            
             # essentially a catch to end a transaction out, and start the next
             if block:
                 
@@ -64,7 +70,7 @@ def create_list_of_transactions(chequeing: str):
                 block = []
                 # reset block to empty for next transaction
 
-        if len(block) >= 2:
+        if len(block) >= 3:
             continue
         # if block is above a certain length, it will contain fluff, like page endings and beginnings
         # restrict block size to clear fluff
@@ -142,6 +148,7 @@ def initialize_dictionary(blocks: list[str]) -> dict[str, int]:
             elif "atm" in block:
                 if "atm" not in decrease:
                     decrease["atm"] = 0
+                
                 a = clean_num(block)
                 decrease["atm"] += a
                 data["current"] -= a
@@ -243,15 +250,16 @@ def initialize_dictionary(blocks: list[str]) -> dict[str, int]:
         return data
     data = sanitize(data)                  
             
-    print(data)
-    
-    
-    pass
+
+    return data
 
 def clean_num(string: str) -> int:
     if sensitive.AREA in string:
+        
         a = string.split(sensitive.AREA)[1].split("\xa0")[0]
     else:
         a = string.split("\xa0")[0]
     b = a.strip().replace(",", "").replace(".", "")
+    
+    
     return int(b)
