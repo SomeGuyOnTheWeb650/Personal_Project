@@ -35,6 +35,8 @@ def build_data(start=None, end=None):
         chunks.extend(blocks)
     
     dictionary = initialize_dictionary(chunks)
+    return dictionary
+
     # woo! got both deposits and withdrawals working, reworked the framework I was using to sort them
     # I definitely know there are better ways, but I got my way working and it feels semi-clean XD
 
